@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/infantry_enemy.tscn" id="2"]
+[ext_resource type="Script" path="res://scripts/testing/enemy_test_range.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/ui/prototype_hud.gd" id="4"]
+
+[node name="EnemyTestRange" type="Node3D"]
+script = ExtResource("3")
+
+[node name="Player" parent="." instance=ExtResource("1")]
+position = Vector3(0, 0.08, 8)
+
+[node name="Enemy" parent="." instance=ExtResource("2")]
+position = Vector3(5, 0.0, -5)
+navigation_target_path = NodePath("../EnemyGoal")
+
+[node name="EnemyGoal" type="Marker3D" parent="."]
+position = Vector3(-5, 0.0, 6)
+
+[node name="HUD" type="CanvasLayer" parent="."]
+script = ExtResource("4")
+
+[node name="Sunlight" type="DirectionalLight3D" parent="."]
+rotation = Vector3(-0.72, -0.55, 0)
+light_energy = 0.9
+shadow_enabled = false

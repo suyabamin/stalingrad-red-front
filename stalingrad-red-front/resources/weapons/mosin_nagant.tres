@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+weapon_name = "Mosin-Nagant"
+damage = 80
+rounds_per_second = 1.2
+magazine_capacity = 5
+starting_magazine_ammo = 5
+starting_reserve_ammo = 30
+reload_duration = 2.8
+automatic = false
+recoil_strength = 0.055
+ads_fov = 58.0
+maximum_range = 250.0

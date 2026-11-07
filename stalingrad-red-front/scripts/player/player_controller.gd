@@ -11,16 +11,21 @@ class_name PlayerController
 @export var look_limit_degrees := 88.0
 
 @onready var camera: Camera3D = $Head/Camera3D
+@onready var health: PlayerHealth = $Health
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var look_pitch := 0.0
+var is_dead: bool = false
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	GameManager.register_player(self)
 	SettingsManager.sensitivity_changed.connect(_on_sensitivity_changed)
 	mouse_sensitivity = SettingsManager.mouse_sensitivity
+	health.died.connect(_on_died)
 
 func _unhandled_input(event: InputEvent) -> void:
+	if is_dead:
+		return
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		rotate_y(-event.relative.x * mouse_sensitivity)
 		look_pitch = clampf(look_pitch - event.relative.y * mouse_sensitivity, deg_to_rad(-look_limit_degrees), deg_to_rad(look_limit_degrees))
@@ -31,6 +36,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _physics_process(delta: float) -> void:
+	if is_dead:
+		velocity = Vector3.ZERO
+		return
 	if not is_on_floor():
 		velocity.y -= gravity * delta
 	elif Input.is_action_just_pressed("jump"):
@@ -46,3 +54,8 @@ func _physics_process(delta: float) -> void:
 
 func _on_sensitivity_changed(value: float) -> void:
 	mouse_sensitivity = value
+
+func _on_died() -> void:
+	is_dead = true
+	velocity = Vector3.ZERO
+	GameManager.notify_player_died()

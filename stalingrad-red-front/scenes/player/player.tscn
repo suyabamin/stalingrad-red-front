@@ -1,6 +1,8 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/player/player_controller.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/player/player_health.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/weapons/weapon_manager.gd" id="3"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape_player"]
 radius = 0.38
@@ -20,3 +22,9 @@ position = Vector3(0, 1.62, 0)
 [node name="Camera3D" type="Camera3D" parent="Head"]
 current = true
 fov = 80.0
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("2")
+
+[node name="WeaponManager" type="Node" parent="."]
+script = ExtResource("3")
