@@ -57,6 +57,8 @@ This plan extends the current prototype incrementally. Keep the existing startup
 
 ## Phase 4: Battlefield Environment and Level Design
 
+**Phase 4A status (2026-11-09): Implemented and runtime/render checked as a low-poly graybox.** The route runs from the Volga landing into the ruined street; full manual traversal and performance profiling remain untested. Phase 4B has not started. See `PHASE_04A_IMPLEMENTATION_REPORT.md` and `PHASE_04A_TEST_REPORT.md`.
+
 - **Objectives:** Turn the existing graybox into a complete, navigable mission route.
 - **Features:** Start approach, combat lanes, intentional cover, boundaries, navigation, rally point, lighting/audio landmarks.
 - **Existing files to modify:** `scripts/environment/battlefield.gd`, `scenes/main/main.tscn`, possibly `docs/PROJECT_ARCHITECTURE.md`.

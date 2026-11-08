@@ -10,4 +10,4 @@ The project selects the Compatibility renderer and Godot's built-in 3D physics e
 
 ## Verification status
 
-The current environment did not expose a Godot executable during implementation. Syntax parsing, editor import, interactive scene launch, movement, mouse look, jumping and Windows export therefore still require verification with Godot 4.7.2. See the delivery report in the project handoff for the checks that were possible here.
+Godot 4.7.2 project scan, Mission 01 runtime assertions, the Phase 3B combat regression harness, and a non-headless 1280×720 rendered launch have been run. The runtime harness simulates movement from the landing into the street. A full manual editor walkthrough, sustained performance profile and Windows export remain untested. See `PHASE_04A_TEST_REPORT.md` and `PHASE_03B_TEST_REPORT.md`.

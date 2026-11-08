@@ -24,7 +24,7 @@ The asset and extension folders are reserved for later phases; no placeholder fi
 ## Runtime scenes and scripts
 
 - `scenes/main/main.tscn` is the startup scene. It owns lighting, the battlefield, player instance, and HUD.
-- `scripts/environment/battlefield.gd` builds low-poly concrete facades, rubble, a clear road and collidable obstacles from primitive meshes. No external assets are needed.
+- `scripts/environment/battlefield.gd` builds a connected Volga landing and ruined industrial street route from shared primitive materials, static collision and simple landmarks. No external assets are needed.
 - `scenes/player/player.tscn` is a reusable `CharacterBody3D`; `scripts/player/player_controller.gd` implements first-person look and movement.
 - `scripts/weapons/weapon_manager.gd` owns Mosin-Nagant and PPSH-41 instances, selection, cooldown, reload timing, ADS and recoil integration. `weapon_base.gd` handles reusable ammunition/reload state and camera-centered hitscan. Weapon statistics and optional audio streams are Resources under `resources/weapons/`.
 - `scenes/testing/combat_test_range.tscn` is an isolated stationary-target range and is not the startup scene.
@@ -41,4 +41,4 @@ Enemy and player health use the `apply_damage(amount: int)` damage receiver conv
 
 ## Performance choices
 
-The scene uses primitive geometry, one directional light without real-time shadows, no post-processing, and basic static collision. The Compatibility renderer is selected in project settings.
+The scene uses primitive geometry and shared rough materials, one directional light without real-time shadows, no post-processing, and basic static collision. The Compatibility renderer is selected in project settings. Phase 4A rendered on Intel UHD 620 at 1280×720; sustained performance has not been profiled. See `PHASE_04A_TEST_REPORT.md`.
