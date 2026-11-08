@@ -1,6 +1,9 @@
 extends Node3D
 ## Lightweight, connected graybox route from the Volga landing to a ruined street.
 
+const MISSION_01: MissionDefinition = preload("res://resources/missions/mission_01.tres")
+const OBJECTIVE_TRIGGER: PackedScene = preload("res://scenes/missions/objective_trigger.tscn")
+
 const COLORS := {
 	"earth": Color(0.24, 0.22, 0.18),
 	"mud": Color(0.32, 0.27, 0.20),
@@ -18,7 +21,21 @@ var _materials: Dictionary = {}
 
 func _ready() -> void:
 	_build_battlefield()
-	MissionManager.start_mission("mission_01")
+	_build_objective_triggers()
+	MissionManager.prepare_mission(MISSION_01)
+
+func _build_objective_triggers() -> void:
+	for index in range(MISSION_01.objectives.size()):
+		var trigger := OBJECTIVE_TRIGGER.instantiate() as ObjectiveTrigger
+		if trigger == null:
+			push_error("Mission 01 objective trigger scene has the wrong root type.")
+			return
+		var objective := MISSION_01.objectives[index]
+		trigger.name = "ObjectiveTrigger%02d" % (index + 1)
+		trigger.objective_id = objective.objective_id
+		trigger.marker_label = "OBJECTIVE %d" % (index + 1)
+		trigger.position = objective.trigger_position
+		add_child(trigger)
 
 func _material(key: String) -> StandardMaterial3D:
 	if _materials.has(key):

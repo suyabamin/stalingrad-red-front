@@ -20,5 +20,7 @@ func restart_current_scene() -> void:
 	get_tree().reload_current_scene()
 
 func set_paused(value: bool) -> void:
+	if get_tree().paused == value:
+		return
 	get_tree().paused = value
 	pause_changed.emit(value)

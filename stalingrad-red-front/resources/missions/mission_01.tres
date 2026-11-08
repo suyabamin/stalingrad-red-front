@@ -1,0 +1,47 @@
+[gd_resource type="Resource" script_class="MissionDefinition" load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/missions/mission_definition.gd" id="1_mission"]
+[ext_resource type="Script" path="res://scripts/missions/objective_definition.gd" id="2_objective"]
+
+[sub_resource type="Resource" id="Objective_landing"]
+script = ExtResource("2_objective")
+objective_id = &"landing_zone"
+display_name = "Reach the Soviet Landing Zone"
+description = "Move forward from the riverbank and reach the marked landing zone."
+trigger_position = Vector3(0, 0, 14)
+
+[sub_resource type="Resource" id="Objective_transition"]
+script = ExtResource("2_objective")
+objective_id = &"battlefield_transition"
+display_name = "Cross the Battlefield Transition"
+description = "Continue inland through the open route."
+trigger_position = Vector3(0, 0, -8)
+
+[sub_resource type="Resource" id="Objective_street"]
+script = ExtResource("2_objective")
+objective_id = &"ruined_street"
+display_name = "Reach Ruined Stalingrad Street"
+description = "Enter the ruined industrial street."
+trigger_position = Vector3(0, 0, -42)
+
+[sub_resource type="Resource" id="Objective_position"]
+script = ExtResource("2_objective")
+objective_id = &"assigned_position"
+display_name = "Secure the Assigned Position"
+description = "Reach the forward position at the street's end."
+trigger_position = Vector3(0, 0, -75)
+
+[sub_resource type="Resource" id="Objective_complete"]
+script = ExtResource("2_objective")
+objective_id = &"mission_complete"
+display_name = "Complete Mission 01"
+description = "Cross the final marker."
+trigger_position = Vector3(0, 0, -90)
+
+[resource]
+script = ExtResource("1_mission")
+mission_id = &"mission_01"
+title = "Across the Volga"
+historical_context = "Battle of Stalingrad, 1942. This is a fictional gameplay scenario inspired by the setting."
+briefing = "Fictional orders: Your unit has crossed the Volga under fire. Move inland through the damaged district and reach the assigned forward position. Stay on the marked route."
+objectives = Array[ExtResource("2_objective")]([SubResource("Objective_landing"), SubResource("Objective_transition"), SubResource("Objective_street"), SubResource("Objective_position"), SubResource("Objective_complete")])

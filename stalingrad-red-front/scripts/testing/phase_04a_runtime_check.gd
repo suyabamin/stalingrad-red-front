@@ -8,6 +8,7 @@ func _ready() -> void:
 	await get_tree().physics_frame
 	var battlefield: Node3D = main.get_node("Battlefield")
 	var player: PlayerController = main.get_node("Player")
+	var hud: CanvasLayer = main.get_node("HUD") as CanvasLayer
 	var checks := 0
 	_assert(main.get_node_or_null("HUD") != null and player.get_node_or_null("WeaponManager") != null, "Mission retains HUD and existing weapon manager")
 	checks += 1
@@ -25,6 +26,9 @@ func _ready() -> void:
 	checks += 1
 	var mission_before := MissionManager.current_mission_id
 	_assert(mission_before == "mission_01", "Mission 01 manager starts with the battlefield")
+	checks += 1
+	(hud.get("start_mission_button") as Button).pressed.emit()
+	_assert(MissionManager.mission_state == MissionManager.MissionState.ACTIVE, "Mission briefing starts the existing campaign scene")
 	checks += 1
 	Input.action_press("move_forward")
 	for _index in 1200:

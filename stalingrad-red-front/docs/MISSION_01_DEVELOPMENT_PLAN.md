@@ -57,7 +57,9 @@ This plan extends the current prototype incrementally. Keep the existing startup
 
 ## Phase 4: Battlefield Environment and Level Design
 
-**Phase 4A status (2026-11-09): Implemented and runtime/render checked as a low-poly graybox.** The route runs from the Volga landing into the ruined street; full manual traversal and performance profiling remain untested. Phase 4B has not started. See `PHASE_04A_IMPLEMENTATION_REPORT.md` and `PHASE_04A_TEST_REPORT.md`.
+**Phase 4A status (2026-11-09): Implemented and runtime/render checked as a low-poly graybox.** The route runs from the Volga landing into the ruined street; see the Phase 4A reports for test limits.
+
+**Phase 4B status (2026-11-09): Implemented; 33 Godot 4.7.2 runtime assertions passed, and non-headless renders of the briefing, objective HUD and completion screen were inspected on Intel UHD 620. The project owner separately reports passing the manual mission briefing/title/text, Start Mission/mouse capture, all five sequential objectives, objective HUD, completion screen and 5/5 count, restart, player death/restart, and F6 Enemy Test Range checks, with no new Godot red errors or problems reported.** Automated evidence and user-performed results are distinguished in `PHASE_04B_TEST_REPORT.md`. Phase 4C has not started.
 
 - **Objectives:** Turn the existing graybox into a complete, navigable mission route.
 - **Features:** Start approach, combat lanes, intentional cover, boundaries, navigation, rally point, lighting/audio landmarks.
@@ -69,16 +71,16 @@ This plan extends the current prototype incrementally. Keep the existing startup
 - **Acceptance criteria:** Continuous readable route from spawn to extraction with stable collision and valid enemy navigation.
 - **Potential risks:** Level scope creep, invisible blockers, navmesh overhead, excessive draw calls.
 
-## Phase 5: Mission Objectives and Progression
+## Phase 5: Expanded Mission Content and Progression
 
-- **Objectives:** Implement ordered objective state and mission transitions.
-- **Features:** Briefing/start, objective triggers, enemy clear condition, rally trigger, success/failure/restart signaling.
+- **Objectives:** Expand the Phase 4B location objective foundation with mission-specific interactions and combat completion conditions.
+- **Features:** Enemy-clear conditions, interaction objectives, checkpoint-aware failure/retry and later mission progression.
 - **Existing files to modify:** `scripts/missions/mission_manager.gd`, `scripts/environment/battlefield.gd` or mission scene, `scripts/core/game_manager.gd` as needed.
 - **New files required:** Objective Resource/script, objective trigger scene/script, mission definition Resource for Mission 01.
 - **Dependencies:** Phase 1 death signals; Phase 3 enemies; Phase 4 route triggers.
 - **Implementation steps:** Define mission/objective data; formalize state transitions; connect trigger/enemy events; guard duplicate completion; define reset of transient state.
 - **Test cases:** Objectives advance only on criteria; duplicate events ignored; failure on death; success only after required objectives; restart returns expected state.
-- **Acceptance criteria:** Mission is completable and failure/retry behavior is deterministic across repeated runs.
+- **Acceptance criteria:** Additional mission conditions integrate with the existing ordered objective and restart lifecycle without duplicate completion.
 - **Potential risks:** Autoload holding stale references; ordering races on scene reload; objective state duplicated across nodes.
 
 ## Phase 6: HUD, UI, Sound and Animation

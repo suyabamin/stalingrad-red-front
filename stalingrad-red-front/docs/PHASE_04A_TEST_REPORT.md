@@ -37,4 +37,4 @@ From the project directory:
 & 'C:\Users\HP\Downloads\Godot_v4.7.2-stable_win64.exe\Godot_v4.7.2-stable_win64.exe' --headless --path . res://scenes/testing/phase_03b_runtime_check.tscn
 ```
 
-The Phase 4A harness prints `PHASE_04A_RUNTIME_CHECKS_PASSED=10`. For the playable mission, F5 runs `scenes/main/main.tscn`; F6 on `scenes/testing/enemy_test_range.tscn` runs the isolated combat range.
+The Phase 4A harness now includes the Phase 4B briefing start and prints `PHASE_04A_RUNTIME_CHECKS_PASSED=11`. F5 runs `scenes/main/main.tscn` and opens the briefing; F6 on `scenes/testing/enemy_test_range.tscn` runs the isolated combat range.

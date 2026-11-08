@@ -14,4 +14,6 @@
 | Capture mouse | Click in the game window |
 | Restart after death | Click **RESTART MISSION** |
 
+On F5 startup, the mission briefing pauses movement and releases the mouse. Click **START MISSION** to begin; the mouse is captured automatically. Objective progress appears at the top right. At mission completion, click **RESTART MISSION** to replay.
+
 Mouse sensitivity is exposed by the `SettingsManager` autoload through `set_mouse_sensitivity(value)`. Its initial value is 0.0025 radians per mouse-motion unit. The death screen's return-to-title option is disabled until a title scene exists.
