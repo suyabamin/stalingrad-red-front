@@ -3,6 +3,8 @@ extends Node3D
 
 @onready var enemy: EnemyController = $Enemy
 var status_label: Label
+var player_health: PlayerHealth
+var _display_timer: float = 0.0
 
 func _ready() -> void:
 	_build_test_geometry()
@@ -10,21 +12,55 @@ func _ready() -> void:
 	_build_status_display()
 	enemy.health.health_changed.connect(_on_enemy_health_changed)
 	enemy.health.died.connect(_on_enemy_died)
+	player_health = $Player/Health
+	player_health.health_changed.connect(_on_player_health_changed)
 	_on_enemy_health_changed(enemy.health.current_health, enemy.health.maximum_health)
+	_on_player_health_changed(player_health.current_health, player_health.maximum_health)
+	enemy.combat_state_changed.connect(_on_enemy_state_changed)
+
+func _process(delta: float) -> void:
+	_display_timer -= delta
+	if _display_timer <= 0.0:
+		_display_timer = 0.25
+		_update_status()
 
 func _build_status_display() -> void:
 	var layer := CanvasLayer.new()
+	layer.layer = 2
 	add_child(layer)
+	var panel := ColorRect.new()
+	panel.position = Vector2(12.0, 128.0)
+	panel.size = Vector2(760.0, 96.0)
+	panel.color = Color(0.025, 0.035, 0.025, 0.82)
+	layer.add_child(panel)
 	status_label = Label.new()
-	status_label.position = Vector2(20.0, 20.0)
-	status_label.add_theme_font_size_override("font_size", 20)
+	status_label.position = Vector2(24.0, 138.0)
+	status_label.custom_minimum_size = Vector2(730.0, 80.0)
+	status_label.add_theme_font_size_override("font_size", 18)
 	layer.add_child(status_label)
 
 func _on_enemy_health_changed(current: int, maximum: int) -> void:
-	status_label.text = "ENEMY  %d / %d   |   Fire to test damage and death" % [current, maximum]
+	_update_status()
 
 func _on_enemy_died() -> void:
-	status_label.text = "ENEMY DEFEATED   |   Death confirmed"
+	_update_status()
+
+func _on_player_health_changed(_current: int, _maximum: int) -> void:
+	_update_status()
+
+func _on_enemy_state_changed(_state: StringName) -> void:
+	_update_status()
+
+func _update_status() -> void:
+	if not is_instance_valid(status_label) or not is_instance_valid(enemy) or not is_instance_valid(player_health):
+		return
+	var state_names: Array[String] = ["IDLE", "INVESTIGATE", "CHASE", "ATTACK", "RELOAD", "DEAD"]
+	var distance := ($Player as Node3D).global_position.distance_to(enemy.global_position)
+	status_label.text = "PHASE 3B ENEMY TEST RANGE  |  DISTANCE %.1f m\nENEMY %d / %d  |  AI %s  |  MAG %d / %d  RES %d\nPLAYER HEALTH %d / %d" % [
+		distance, enemy.health.current_health, enemy.health.maximum_health,
+		state_names[enemy.combat_state], enemy.magazine_ammunition, enemy.magazine_capacity,
+		enemy.reserve_ammunition, player_health.current_health, player_health.maximum_health
+	]
 
 func _build_test_geometry() -> void:
 	var floor_body := StaticBody3D.new()

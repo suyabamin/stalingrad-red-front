@@ -43,10 +43,12 @@ This plan extends the current prototype incrementally. Keep the existing startup
 
 ## Phase 3B: Enemy AI, Detection and Combat
 
+**Status (2026-11-09): Implemented; headless runtime checks passed for state transitions, navigation pursuit, wall occlusion, damage, reload/exhaustion and terminal death.** See `PHASE_03B_IMPLEMENTATION_REPORT.md` and `PHASE_03B_TEST_REPORT.md`. Interactive visual review remains outstanding.
+
 - **Objectives:** Add a small, readable opposing force with detection, combat and reliable pathing.
-- **Features:** Reusable enemy scene, health, navigation, detection, engage/fire, death and simple cover behavior.
-- **Existing files to modify:** `scripts/core/game_manager.gd` only for lifecycle integration if needed; collision/input documentation.
-- **New files required:** `scenes/enemies/infantry_enemy.tscn`; scripts for enemy brain, health/combat and weapon; navigation region scene/resource as appropriate; minimal animation resources when available.
+- **Features:** Reusable enemy scene, health, navigation, detection, investigate/chase/attack/reload/dead states, spread hitscan fire and test-range combat readout.
+- **Existing files modified:** `scripts/enemies/enemy_controller.gd`, `scripts/testing/enemy_test_range.gd`, architecture, status and phase documents.
+- **New files:** `scenes/testing/phase_03b_runtime_check.tscn`, `scripts/testing/phase_03b_runtime_check.gd`, and Phase 3B reports.
 - **Dependencies:** Phases 1â€“2 damage/weapon contracts; Phase 4 navigation-ready geometry can be developed alongside this phase but bake validation is required.
 - **Implementation steps:** Define collision layers; build enemy body and hit area; bake navigation; implement state machine; add line-of-sight and range checks; add bounded enemy attack cadence; stop navigation and combat on death.
 - **Test cases:** Detect inside/outside range and FOV; wall blocks sight; chase around obstacle; unreachable path recovery; damage/death once; enemies do not fire through cover.

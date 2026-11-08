@@ -28,8 +28,8 @@ The asset and extension folders are reserved for later phases; no placeholder fi
 - `scenes/player/player.tscn` is a reusable `CharacterBody3D`; `scripts/player/player_controller.gd` implements first-person look and movement.
 - `scripts/weapons/weapon_manager.gd` owns Mosin-Nagant and PPSH-41 instances, selection, cooldown, reload timing, ADS and recoil integration. `weapon_base.gd` handles reusable ammunition/reload state and camera-centered hitscan. Weapon statistics and optional audio streams are Resources under `resources/weapons/`.
 - `scenes/testing/combat_test_range.tscn` is an isolated stationary-target range and is not the startup scene.
-- `scenes/enemies/infantry_enemy.tscn` is a reusable CharacterBody3D graybox actor. Its `EnemyHealth` component implements `apply_damage(amount: int)`, and its controller follows an assigned NodePath target using NavigationAgent3D with local avoidance. It does not detect or attack the player.
-- `scenes/testing/enemy_test_range.tscn` is an isolated navigation and damage scene with a simple floor, obstacles, one enemy, and a health/death readout. The test scene does not change the Mission 01 startup scene.
+- `scenes/enemies/infantry_enemy.tscn` is a reusable CharacterBody3D graybox actor. Its `EnemyHealth` component implements `apply_damage(amount: int)`. `EnemyController` detects the registered player, investigates a hidden target's last known position, chases via NavigationAgent3D with local avoidance, fires line-of-sight checked hitscan, reloads a configurable magazine, and stops combat on either participant's death.
+- `scenes/testing/enemy_test_range.tscn` is an isolated navigation and combat scene with the existing player/HUD, obstacles, one enemy and live enemy health/state/ammunition/player health readout. `scenes/testing/phase_03b_runtime_check.tscn` runs the headless combat assertions. Neither scene changes the Mission 01 startup scene.
 - `scripts/ui/prototype_hud.gd` adds a reticle, controls hint, health display, and signal-driven weapon/ammunition/reload display.
 - `scripts/core/game_manager.gd` tracks the active player and pause state, with signals for lifecycle changes.
 - `scripts/missions/mission_manager.gd` tracks mission start and completion signals. It does not implement campaign content.
@@ -37,7 +37,7 @@ The asset and extension folders are reserved for later phases; no placeholder fi
 
 The hitscan damage receiver convention is `apply_damage(amount: int)`. The player's RID is excluded from the weapon ray query. Weapon graybox meshes and hit markers are generated with built-in primitives; there are no bundled weapon/audio assets.
 
-Enemy health uses the same damage receiver convention as the stationary combat test target. Enemy navigation waits safely for a synchronized map and stops if the target is missing. The five animation names (idle, walking, running, hit, death) are procedural placeholder motion only; no licensed character model or animation assets are included.
+Enemy and player health use the `apply_damage(amount: int)` damage receiver convention. Enemy detection and sight checks are interval driven; shot rays run only when firing. Enemy navigation waits safely for a synchronized map. Enemy combat settings are exported on `EnemyController`. The five animation names (idle, walking, running, hit, death) are procedural placeholder motion only; no licensed character model or animation assets are included.
 
 ## Performance choices
 

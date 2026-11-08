@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=15 format=3]
 
 [ext_resource type="Script" path="res://scripts/enemies/enemy_controller.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/enemies/enemy_health.gd" id="2"]
@@ -7,9 +7,8 @@
 radius = 0.32
 height = 1.75
 
-[sub_resource type="CapsuleMesh" id="TorsoMesh"]
-radius = 0.29
-mid_height = 0.75
+[sub_resource type="BoxMesh" id="TorsoMesh"]
+size = Vector3(0.58, 0.78, 0.34)
 
 [sub_resource type="SphereMesh" id="HeadMesh"]
 radius = 0.19
@@ -18,8 +17,33 @@ height = 0.38
 [sub_resource type="BoxMesh" id="HelmetMesh"]
 size = Vector3(0.42, 0.16, 0.42)
 
+[sub_resource type="BoxMesh" id="ArmsMesh"]
+size = Vector3(0.18, 0.62, 0.24)
+
+[sub_resource type="BoxMesh" id="LegsMesh"]
+size = Vector3(0.22, 0.7, 0.26)
+
+[sub_resource type="BoxMesh" id="RifleMesh"]
+size = Vector3(0.1, 0.1, 0.8)
+
 [sub_resource type="StandardMaterial3D" id="UniformMaterial"]
-albedo_color = Color(0.25, 0.29, 0.22, 1)
+albedo_color = Color(0.46, 0.51, 0.34, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="FaceMaterial"]
+albedo_color = Color(0.62, 0.47, 0.34, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="HelmetMaterial"]
+albedo_color = Color(0.2, 0.25, 0.17, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="TrousersMaterial"]
+albedo_color = Color(0.24, 0.29, 0.22, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="RifleMaterial"]
+albedo_color = Color(0.24, 0.16, 0.1, 1)
 roughness = 1.0
 
 [node name="InfantryEnemy" type="CharacterBody3D"]
@@ -50,17 +74,43 @@ maximum_health = 80
 position = Vector3(0, 0.85, 0)
 
 [node name="Torso" type="MeshInstance3D" parent="Visual"]
+position = Vector3(0, 0.14, 0)
 mesh = SubResource("TorsoMesh")
 material_override = SubResource("UniformMaterial")
 
 [node name="Head" type="MeshInstance3D" parent="Visual"]
-position = Vector3(0, 0.57, 0)
+position = Vector3(0, 0.65, 0)
 mesh = SubResource("HeadMesh")
-material_override = SubResource("UniformMaterial")
+material_override = SubResource("FaceMaterial")
 
 [node name="Helmet" type="MeshInstance3D" parent="Visual"]
-position = Vector3(0, 0.76, 0)
+position = Vector3(0, 0.8, 0)
 mesh = SubResource("HelmetMesh")
+material_override = SubResource("HelmetMaterial")
+
+[node name="LeftArm" type="MeshInstance3D" parent="Visual"]
+position = Vector3(-0.36, 0.24, 0)
+mesh = SubResource("ArmsMesh")
 material_override = SubResource("UniformMaterial")
+
+[node name="RightArm" type="MeshInstance3D" parent="Visual"]
+position = Vector3(0.36, 0.24, 0)
+mesh = SubResource("ArmsMesh")
+material_override = SubResource("UniformMaterial")
+
+[node name="LeftLeg" type="MeshInstance3D" parent="Visual"]
+position = Vector3(-0.15, -0.32, 0)
+mesh = SubResource("LegsMesh")
+material_override = SubResource("TrousersMaterial")
+
+[node name="RightLeg" type="MeshInstance3D" parent="Visual"]
+position = Vector3(0.15, -0.32, 0)
+mesh = SubResource("LegsMesh")
+material_override = SubResource("TrousersMaterial")
+
+[node name="Rifle" type="MeshInstance3D" parent="Visual"]
+position = Vector3(0.24, 0.18, -0.12)
+mesh = SubResource("RifleMesh")
+material_override = SubResource("RifleMaterial")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
