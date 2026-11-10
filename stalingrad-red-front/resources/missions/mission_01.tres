@@ -1,41 +1,49 @@
-[gd_resource type="Resource" script_class="MissionDefinition" load_steps=8 format=3]
+[gd_resource type="Resource" script_class="MissionDefinition" load_steps=12 format=3]
 
 [ext_resource type="Script" path="res://scripts/missions/mission_definition.gd" id="1_mission"]
 [ext_resource type="Script" path="res://scripts/missions/objective_definition.gd" id="2_objective"]
+[ext_resource type="Resource" path="res://resources/missions/encounters/landing_encounter.tres" id="3_landing"]
+[ext_resource type="Resource" path="res://resources/missions/encounters/transition_encounter.tres" id="4_transition"]
+[ext_resource type="Resource" path="res://resources/missions/encounters/street_encounter.tres" id="5_street"]
+[ext_resource type="Resource" path="res://resources/missions/encounters/position_encounter.tres" id="6_position"]
 
 [sub_resource type="Resource" id="Objective_landing"]
 script = ExtResource("2_objective")
 objective_id = &"landing_zone"
-display_name = "Reach the Soviet Landing Zone"
-description = "Move forward from the riverbank and reach the marked landing zone."
+display_name = "Clear the Landing"
+description = "Reach the marked landing and eliminate the defending infantry."
 trigger_position = Vector3(0, 0, 14)
+encounter = ExtResource("3_landing")
 
 [sub_resource type="Resource" id="Objective_transition"]
 script = ExtResource("2_objective")
 objective_id = &"battlefield_transition"
-display_name = "Cross the Battlefield Transition"
-description = "Continue inland through the open route."
+display_name = "Secure the Crossing"
+description = "Reach the crossing and clear the enemy position."
 trigger_position = Vector3(0, 0, -8)
+encounter = ExtResource("4_transition")
 
 [sub_resource type="Resource" id="Objective_street"]
 script = ExtResource("2_objective")
 objective_id = &"ruined_street"
-display_name = "Reach Ruined Stalingrad Street"
-description = "Enter the ruined industrial street."
+display_name = "Clear the Ruined Street"
+description = "Enter the street and eliminate the occupying infantry."
 trigger_position = Vector3(0, 0, -42)
+encounter = ExtResource("5_street")
 
 [sub_resource type="Resource" id="Objective_position"]
 script = ExtResource("2_objective")
 objective_id = &"assigned_position"
-display_name = "Secure the Assigned Position"
-description = "Reach the forward position at the street's end."
+display_name = "Secure the Forward Position"
+description = "Reach the forward position and defeat its defenders."
 trigger_position = Vector3(0, 0, -75)
+encounter = ExtResource("6_position")
 
 [sub_resource type="Resource" id="Objective_complete"]
 script = ExtResource("2_objective")
 objective_id = &"mission_complete"
-display_name = "Complete Mission 01"
-description = "Cross the final marker."
+display_name = "Reach the Rally Point"
+description = "Proceed to the final rally marker."
 trigger_position = Vector3(0, 0, -90)
 
 [resource]

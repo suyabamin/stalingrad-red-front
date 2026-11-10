@@ -12,7 +12,7 @@ func _ready() -> void:
 	var checks := 0
 	_assert(main.get_node_or_null("HUD") != null and player.get_node_or_null("WeaponManager") != null, "Mission retains HUD and existing weapon manager")
 	checks += 1
-	_assert(main.find_children("*", "EnemyController", true, false).is_empty(), "Mission 01 remains free of Phase 3B enemies")
+	_assert(main.find_children("*", "EnemyController", true, false).is_empty(), "Mission 01 briefing starts with no spawned enemies")
 	checks += 1
 	_assert(battlefield.get_node_or_null("VolgaWater") != null and battlefield.get_node_or_null("LandingPier") != null, "Volga landing and water landmarks instantiate")
 	_assert(battlefield.get_node_or_null("RuinedBuildingShell") != null and battlefield.get_node_or_null("WreckedLorryChassis") != null, "Ruined street landmarks instantiate")
@@ -29,6 +29,10 @@ func _ready() -> void:
 	checks += 1
 	(hud.get("start_mission_button") as Button).pressed.emit()
 	_assert(MissionManager.mission_state == MissionManager.MissionState.ACTIVE, "Mission briefing starts the existing campaign scene")
+	checks += 1
+	for _index in 8:
+		await get_tree().physics_frame
+	_assert(battlefield.get_node("EncounterManager").get_living_enemy_count() == 1, "Starting objective one spawns its mission-owned encounter")
 	checks += 1
 	Input.action_press("move_forward")
 	for _index in 1200:

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://b7k3m8w1q94lp"]
+
+[ext_resource type="Script" path="res://scripts/testing/phase3_german_reload_animation.gd" id="1_reload"]
+
+[node name="Phase3GermanReloadAnimation" type="Node3D"]
+script = ExtResource("1_reload")

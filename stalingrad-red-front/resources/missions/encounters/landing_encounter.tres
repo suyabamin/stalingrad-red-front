@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="EncounterDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/missions/encounter_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+encounter_id = &"landing_encounter"
+spawn_positions = Array[Vector3]([Vector3(3, 0, 4)])
+max_simultaneous_enemies = 2

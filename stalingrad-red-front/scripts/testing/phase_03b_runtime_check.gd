@@ -66,6 +66,28 @@ func _ready() -> void:
 	await _frames(90)
 	_assert(player.health.current_health < hp_before, "Enemy firing damages PlayerHealth")
 	checks += 1
+	enemy._player = player
+	enemy._player_health = player.health
+	enemy._has_sight = true
+	enemy._fire_at_player()
+	var audio_root := get_tree().root
+	var enemy_audio_nodes := audio_root.find_children("*", "AudioStreamPlayer3D", true, false)
+	var found_enemy_gunshot := false
+	for audio_node in enemy_audio_nodes:
+		var enemy_audio := audio_node as AudioStreamPlayer3D
+		if enemy_audio.stream != null and enemy_audio.stream.resource_path.ends_with("mosin_fire.tres") and enemy_audio.playing:
+			found_enemy_gunshot = true
+	_assert(found_enemy_gunshot, "Enemy firing dispatches its spatial gunshot stream")
+	checks += 1
+	enemy._begin_reload()
+	enemy_audio_nodes = audio_root.find_children("*", "AudioStreamPlayer3D", true, false)
+	var found_enemy_reload := false
+	for audio_node in enemy_audio_nodes:
+		var enemy_audio := audio_node as AudioStreamPlayer3D
+		if enemy_audio.stream != null and enemy_audio.stream.resource_path.ends_with("mosin_reload_short.tres") and enemy_audio.playing:
+			found_enemy_reload = true
+	_assert(found_enemy_reload, "Enemy reload dispatches its shortened spatial reload stream")
+	checks += 1
 	player.global_position = Vector3(5.0, 0.0, 8.0)
 	enemy.global_position = Vector3(5.0, 0.0, 0.0)
 	enemy.velocity = Vector3.ZERO
@@ -146,6 +168,12 @@ func _ready() -> void:
 	await _frames(60)
 	_assert(witness.is_dead and state_after_death == EnemyController.CombatState.DEAD and witness.combat_state == EnemyController.CombatState.DEAD, "Enemy death is terminal")
 	checks += 1
+	for audio_node in get_tree().root.find_children("*", "AudioStreamPlayer3D", true, false):
+		var combat_audio := audio_node as AudioStreamPlayer3D
+		if combat_audio.stream != null and (combat_audio.stream.resource_path.ends_with("mosin_fire.tres") or combat_audio.stream.resource_path.ends_with("mosin_reload_short.tres")):
+			combat_audio.stop()
+			combat_audio.queue_free()
+	await get_tree().process_frame
 	print("PHASE_03B_RUNTIME_CHECKS_PASSED=%d" % checks)
 	get_tree().quit(0)
 

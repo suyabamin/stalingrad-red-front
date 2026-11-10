@@ -17,7 +17,7 @@ Verification date: 2026-11-09
 | Godot 4.7.2 project scan | PASSED | `--editor --quit` completed. Initial scan exposed a script parse error that was corrected before final run. |
 | Configured F5 startup scene | PASSED | Godot launched the `project.godot` main scene non-headlessly and exited after 180 frames without scene/script errors. |
 | Main scene and existing gameplay wiring | PASSED | Phase 4A runtime harness confirms main scene instantiates the existing player, current camera, weapon manager and HUD. |
-| Mission enemy isolation | PASSED | Runtime harness confirms no `EnemyController` is present in the Mission 01 scene tree. |
+| Mission encounter start behavior | PASSED | At briefing time there are no spawned Mission 01 enemies; starting the mission spawns the first encounter. See the Phase 4C report for the new combat-aware scene behavior. |
 | Landing and street landmarks | PASSED | Harness confirms Volga, pier, ruined building and lorry nodes are built. |
 | Player start and floor collision | PASSED | Player starts at `(0, 0.08, 22)` with active first-person camera; downward physics ray hit `ContinuousGround`. |
 | Traversal / fall check | PASSED | Existing forward movement was simulated for 1200 physics frames; player reached past z=-70 from the z=22 landing and remained within the ground-height range, traversing the landing, transition and ruined street route. This is automated input simulation, not manual editor play. |
@@ -37,4 +37,4 @@ From the project directory:
 & 'C:\Users\HP\Downloads\Godot_v4.7.2-stable_win64.exe\Godot_v4.7.2-stable_win64.exe' --headless --path . res://scenes/testing/phase_03b_runtime_check.tscn
 ```
 
-The Phase 4A harness now includes the Phase 4B briefing start and prints `PHASE_04A_RUNTIME_CHECKS_PASSED=11`. F5 runs `scenes/main/main.tscn` and opens the briefing; F6 on `scenes/testing/enemy_test_range.tscn` runs the isolated combat range.
+The original Phase 4A harness result was 11 checks before Phase 4C. The updated regression harness prints `PHASE_04A_RUNTIME_CHECKS_PASSED=12`, including no encounter actors before Start Mission and the first encounter after it. F5 runs `scenes/main/main.tscn`; F6 on `scenes/testing/enemy_test_range.tscn` remains isolated.

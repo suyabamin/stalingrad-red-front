@@ -1,0 +1,11 @@
+Model Information:
+* title:	ruined house low poly
+* source:	https://sketchfab.com/3d-models/ruined-house-low-poly-9fdc8d1f23a249768c377db0dfcaf42c
+* author:	ribot02 (https://sketchfab.com/ribot02)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "ruined house low poly" (https://sketchfab.com/3d-models/ruined-house-low-poly-9fdc8d1f23a249768c377db0dfcaf42c) by ribot02 (https://sketchfab.com/ribot02) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

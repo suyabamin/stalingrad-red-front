@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/textures/environment/earth_surface.png" id="surface"]
+
+[resource]
+resource_name = "Road - worn charcoal earth"
+albedo_color = Color(0.31, 0.30, 0.28, 1)
+roughness = 0.93
+metallic = 0
+albedo_texture = ExtResource("surface")
+uv1_scale = Vector3(8, 80, 1)

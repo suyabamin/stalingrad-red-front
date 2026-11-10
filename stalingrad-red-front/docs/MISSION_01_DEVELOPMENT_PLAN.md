@@ -59,7 +59,7 @@ This plan extends the current prototype incrementally. Keep the existing startup
 
 **Phase 4A status (2026-11-09): Implemented and runtime/render checked as a low-poly graybox.** The route runs from the Volga landing into the ruined street; see the Phase 4A reports for test limits.
 
-**Phase 4B status (2026-11-09): Implemented; 33 Godot 4.7.2 runtime assertions passed, and non-headless renders of the briefing, objective HUD and completion screen were inspected on Intel UHD 620. The project owner separately reports passing the manual mission briefing/title/text, Start Mission/mouse capture, all five sequential objectives, objective HUD, completion screen and 5/5 count, restart, player death/restart, and F6 Enemy Test Range checks, with no new Godot red errors or problems reported.** Automated evidence and user-performed results are distinguished in `PHASE_04B_TEST_REPORT.md`. Phase 4C has not started.
+**Phase 4B status (2026-11-09):** Its original 33-check runtime suite and owner-reported manual results are preserved in `PHASE_04B_TEST_REPORT.md`. After Phase 4C integration, the updated 36-check regression suite passes with encounter-aware objective progression. The owner's prior manual results predate combat integration and do not represent Phase 4C manual verification.
 
 - **Objectives:** Turn the existing graybox into a complete, navigable mission route.
 - **Features:** Start approach, combat lanes, intentional cover, boundaries, navigation, rally point, lighting/audio landmarks.
@@ -71,17 +71,25 @@ This plan extends the current prototype incrementally. Keep the existing startup
 - **Acceptance criteria:** Continuous readable route from spawn to extraction with stable collision and valid enemy navigation.
 - **Potential risks:** Level scope creep, invisible blockers, navmesh overhead, excessive draw calls.
 
-## Phase 5: Expanded Mission Content and Progression
+**Phase 4C status (2026-11-09): COMPLETE.** Automated regressions passed, and the project owner reports manual gameplay verification passed. See `PHASE_04C_IMPLEMENTATION_REPORT.md` and `PHASE_04C_TEST_REPORT.md`; manual results are separately attributed and item-level details were not supplied. Phase 5 planning is complete; Phase 5A's foundation is implemented, while rendered review remains pending.
 
-- **Objectives:** Expand the Phase 4B location objective foundation with mission-specific interactions and combat completion conditions.
-- **Features:** Enemy-clear conditions, interaction objectives, checkpoint-aware failure/retry and later mission progression.
-- **Existing files to modify:** `scripts/missions/mission_manager.gd`, `scripts/environment/battlefield.gd` or mission scene, `scripts/core/game_manager.gd` as needed.
-- **New files required:** Objective Resource/script, objective trigger scene/script, mission definition Resource for Mission 01.
-- **Dependencies:** Phase 1 death signals; Phase 3 enemies; Phase 4 route triggers.
-- **Implementation steps:** Define mission/objective data; formalize state transitions; connect trigger/enemy events; guard duplicate completion; define reset of transient state.
-- **Test cases:** Objectives advance only on criteria; duplicate events ignored; failure on death; success only after required objectives; restart returns expected state.
-- **Acceptance criteria:** Additional mission conditions integrate with the existing ordered objective and restart lifecycle without duplicate completion.
-- **Potential risks:** Autoload holding stale references; ordering races on scene reload; objective state duplicated across nodes.
+### Phase 4C — Mission 01 Combat Integration
+
+- **Goal:** Integrate the existing infantry AI into Mission 01 while preserving the player, weapons, health/death/restart, HUD, mission UI, and separate F6 test range.
+- **Proposed objectives:** Secure the Landing (one threat); Clear the Battlefield (two); Advance Through the Street (two); Secure the Position (three staged with at most two alive at once); Complete the Mission (reach the existing final rally marker, no additional enemy).
+- **Architecture:** Add optional encounter data to objectives and a Mission 01-local encounter manager beneath Battlefield. MissionManager remains the sole objective completion authority and gates progress on location plus encounter-clear conditions. Reuse `infantry_enemy.tscn`, `EnemyHealth.died`, and existing `EnemyController`; do not add global encounter state.
+- **Navigation result:** A hand-authored central corridor is built by `battlefield.gd`. The Phase 4C harness confirms synchronization and projection of all eight configured spawn positions. The project owner reports Phase 4C manual gameplay verification passed; item-level observations were not supplied.
+- **Scope boundary:** Phase 4C implementation and verification are complete. Phase 5A is implemented; Phase 5B has not started and requires owner review and separate authorization.
+- **Plan:** See `PHASE_04C_ARCHITECTURE_PLAN.md` for current architecture findings, exact expected files, signal flow, lifecycle, risks, staged implementation, regression strategy and acceptance criteria.
+
+## Phase 5: Mission 01 Visual Overhaul
+
+**Status (2026-11-09): Architecture planning COMPLETE; Phase 5A foundation IMPLEMENTED; rendered visual review and owner gameplay verification PENDING; Phase 5B NOT STARTED.** See `PHASE_05_ARCHITECTURE_PLAN.md` and the Phase 5A implementation and test reports.
+
+- **Objective:** Replace the flat graybox presentation with a cohesive, historically inspired and performance-conscious visual treatment while preserving completed Phase 4C gameplay.
+- **Stages:** 5A visual/material foundation implemented; 5B area geometry and architecture; 5C lighting/atmosphere; 5D environmental storytelling and visual consistency; 5E optimization and final verification.
+- **Constraints:** Do not alter player, weapons, enemy AI, mission objectives, encounter logic, navigation, trigger/spawn coordinates, HUD behavior or F6 range. Prefer native resources and small, legally usable assets. Measure performance on Intel UHD 620; do not promise an FPS target.
+- **Approval boundary:** Stop after Phase 5A. The owner must review the rendered result and manually verify gameplay before Phase 5B is authorized.
 
 ## Phase 6: HUD, UI, Sound and Animation
 

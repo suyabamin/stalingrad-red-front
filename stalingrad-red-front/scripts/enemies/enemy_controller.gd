@@ -2,6 +2,10 @@ extends CharacterBody3D
 class_name EnemyController
 ## Reusable infantry detection, navigation, firing and ammunition state.
 
+const GLTFAssetLoader = preload("res://scripts/core/gltf_asset_loader.gd")
+const ENEMY_FIRE_SOUND: AudioStream = preload("res://assets/library/audio/weapons/soviet/mosin_fire.tres")
+const ENEMY_RELOAD_SOUND: AudioStream = preload("res://assets/library/audio/weapons/soviet/mosin_reload_short.tres")
+
 signal animation_state_changed(state: StringName)
 signal combat_state_changed(state: StringName)
 
@@ -59,6 +63,7 @@ func _ready() -> void:
 	_rng.randomize()
 	animation_player.add_animation_library(&"", _build_placeholder_animations())
 	_find_player()
+	_setup_authentic_visual()
 	_set_animation_state(AnimationState.IDLE)
 
 func _physics_process(delta: float) -> void:
@@ -203,6 +208,7 @@ func _fire_at_player() -> void:
 		return
 	magazine_ammunition -= 1
 	_fire_timer = fire_interval
+	_play_spatial_combat_audio(ENEMY_FIRE_SOUND, -2.0, 8.0, 60.0)
 	var origin := global_position + Vector3.UP * 1.35
 	var direction := (_player.global_position + Vector3.UP * 1.1 - origin).normalized()
 	direction += Vector3(_rng.randf_range(-accuracy_spread, accuracy_spread), _rng.randf_range(-accuracy_spread, accuracy_spread), _rng.randf_range(-accuracy_spread, accuracy_spread))
@@ -217,7 +223,33 @@ func _fire_at_player() -> void:
 
 func _begin_reload() -> void:
 	_reload_timer = reload_duration
+	_play_spatial_combat_audio(ENEMY_RELOAD_SOUND, -4.0, 5.0, 40.0)
 	_set_combat_state(CombatState.RELOAD)
+
+func _play_spatial_combat_audio(stream: AudioStream, volume_db: float, unit_size: float, max_distance: float) -> void:
+	if stream == null:
+		return
+	var audio := AudioStreamPlayer3D.new()
+	audio.name = "EnemyCombatAudio"
+	audio.stream = stream
+	audio.bus = &"Master"
+	audio.volume_db = volume_db
+	audio.unit_size = unit_size
+	audio.max_distance = max_distance
+	audio.process_mode = Node.PROCESS_MODE_ALWAYS
+	var audio_root := get_tree().current_scene
+	if audio_root == null:
+		audio_root = get_tree().root
+	audio_root.add_child(audio)
+	audio.global_position = global_position + Vector3.UP * 1.35
+	audio.finished.connect(audio.queue_free)
+	var expiry := Timer.new()
+	expiry.one_shot = true
+	expiry.wait_time = maxf(0.1, stream.get_length() + 0.25)
+	expiry.timeout.connect(audio.queue_free)
+	audio.add_child(expiry)
+	expiry.start()
+	audio.play()
 
 func _set_combat_state(value: CombatState) -> void:
 	if combat_state == value:
@@ -309,3 +341,13 @@ func _add_visual_animation(library: AnimationLibrary, animation_name: StringName
 		animation.track_insert_key(rotation_track, duration * 0.45, final_rotation)
 		animation.track_insert_key(rotation_track, duration, base_rotation if animation_name == &"hit" else final_rotation)
 	library.add_animation(animation_name, animation)
+
+func _setup_authentic_visual() -> void:
+	if visual_root == null:
+		return
+	var soldier_visual: Node3D = GLTFAssetLoader.instantiate_german_soldier()
+	if soldier_visual != null:
+		for child in visual_root.get_children():
+			if child is VisualInstance3D and child != soldier_visual:
+				child.scale = Vector3(0.001, 0.001, 0.001)
+		visual_root.add_child(soldier_visual)

@@ -1,0 +1,123 @@
+# Phase 5B — Realistic Battlefield Asset Integration Plan
+
+**Planning snapshot:** 2026-11-09. Phase 5B implementation was subsequently authorized and is recorded in `PHASE_05B_IMPLEMENTATION_REPORT.md`.  
+**Phase 5A — Mission 01 Visual Foundation is COMPLETE. Owner visual review: APPROVED. Owner manual gameplay verification: APPROVED.**  
+**Prepared:** 2026-11-09
+
+This document preserves the original small-first proposal and asset screening as a planning record. Its 2026-11-09 statements that implementation had not started describe that date only. Phase 5B was later authorized and implemented; see the implementation and test reports for final placements, rights, measurements, and remaining owner checks.
+
+## 1. Current project constraints
+
+Mission 01 is built procedurally in `scripts/environment/battlefield.gd`. The current street has a 10 m road, a continuous ground slab, six pairs of box facade shells, cover, a prop lorry and utility poles. It uses twelve shared opaque `StandardMaterial3D` resources and five 256×256 tiling maps. The project is Godot 4.7.2, GL Compatibility, 1280×720, and is being targeted at Intel UHD 620 with 16 GB system RAM.
+
+The route and mission contracts are defined by `resources/missions/mission_01.tres` and `resources/missions/encounters/*.tres`. The navigation polygon spans approximately x=-4.2…4.2. Mission objectives are at z=14, -8, -42, -75, and -90. Enemy positions include x=±3 at z=-17, -20, -50, -54, -67, -71 and -74. The pilot below stays on the street shoulder and does not alter those values.
+
+At the time this plan was prepared, Phase 5A was complete and Phase 5B awaited authorization. The owner later authorized the full Phase 5B milestone on 2026-11-10.
+
+## 2. Recommended asset sources
+
+| Source | Best fit | Rights and screening |
+|---|---|---|
+| [Poly Haven](https://polyhaven.com/models) | CC0 models, environment props, and tiling PBR textures. Many entries provide glTF and selectable 1K/2K/4K maps. | Poly Haven states its models and textures are CC0 and may be used commercially; attribution is optional. Use the individual asset page and retain a local license record. ([license](https://polyhaven.com/license)) |
+| [ambientCG](https://ambientcg.com/) | CC0 PBR surfaces and HDRIs; useful for damaged brick, plaster, concrete, earth and dirt materials if the existing maps need a richer material family. | ambientCG states downloadable assets are CC0 1.0, including commercial use and redistribution in a game. Prefer 1K JPG archives for this target. ([license](https://docs.ambientcg.com/license/)) |
+| [Sketchfab downloadable models](https://sketchfab.com/features/gltf) | Larger choice of authored ruins and scans where the individual listing allows download. | User-uploaded listings vary. Check the specific model's downloadable status, exact CC license, author/credit chain, source file notes, and any third-party components. CC BY permits commercial sharing/adaptation when attribution and change notices are supplied. ([Sketchfab glTF export](https://sketchfab.com/features/gltf), [CC BY 4.0 terms](https://creativecommons.org/licenses/by/4.0/)) |
+| [Innerscene Free Parts Library](https://www.innerscene.com/tools/library/3d-parts) | Individual, real-scale GLB parts such as sandbag sections. | Check the individual item's CC0/source declaration and keep its manifest/license record. Its Sandbag Wall Segment is explicitly an original Innerscene model under CC0. ([asset page](https://www.innerscene.com/tools/library/3d-parts/sandbag-wall-segment-1017f5ee)) |
+
+Godot supports `.gltf` and `.glb` scene import; use glTF 2.0/GLB where supplied, and test the actual downloaded file in 4.7.2 before choosing it. ([Godot importing 3D scenes](https://docs.godotengine.org/en/4.0/tutorials/assets_pipeline/importing_scenes.html))
+
+## 3. Verified candidate shortlist
+
+These are candidates, not approvals to download or use. Memory figures are planning estimates, not measurements. They assume a static mesh and limited 1K maps unless stated; mesh bytes, material count, import compression, mipmaps, and GPU residency vary. Verify actual archive size and imported memory in the pilot.
+
+| Candidate and source | Creator / license / commercial use | Download format and source texture resolution | Polygon count | Estimated additional resident memory | Recommendation / caveats |
+|---|---|---|---:|---:|---|
+| [Ruined House Low Poly](https://sketchfab.com/3d-models/ruined-house-low-poly-9fdc8d1f23a249768c377db0dfcaf42c) | ribot02; listing says Creative Commons Attribution (CC BY; confirm exact version in download/license metadata). Commercial use is allowed under CC BY with attribution, license link and change notice. ([CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)) | Downloadable Sketchfab model; Sketchfab offers glTF export for downloadable models. The asset page does not state texture resolution or archive size. | 1.8K tris | **Provisional 2–20 MiB** after import. Lower end if the mesh can reuse existing materials; upper range allows one compact 1K PBR set. Texture payload is unreported and must be inspected before approval. | Best visual fit for the facade pilot due to its explicitly industrial ruined-building subject and small triangle count. Inspect silhouette, scale, materials and rights chain; use only a wall/facade portion if the full building reads as a freestanding house. |
+| [Rubble Pile (Game Ready / 2K PBR)](https://sketchfab.com/3d-models/rubble-pile-game-ready-2k-pbr-0e6f85da3433468db226866bd43a43e7) | Meerschaum Digital; listing says CC Attribution. Its notes identify the source scan “Rubble material pile” by matousekfoto, also under CC BY. Preserve credit to both and verify exact license metadata. Commercial use is allowed with CC BY attribution/change notices. | Downloadable Sketchfab glTF; source specifies 2K albedo, normal and AO textures. Exact archive size not reported. | 1,536 tris | **Provisional 12–55 MiB** with the supplied 2K maps, depending on import compression; target 1K maps if the asset remains clear at gameplay distance. | Strong pilot debris candidate: the source listing identifies real-time retopology and provides texture/poly data. Ensure attribution chain is kept in asset inventory. ([CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)) |
+| [Old Military Crate](https://polyhaven.com/a/old_military_crate) | Jack Mava; CC0. Commercial use and redistribution permitted; attribution is optional. ([Poly Haven license](https://polyhaven.com/license)) | glTF, USD, FBX and ZIP are listed. Texture choices 1K/2K/4K/8K; page’s default package is 50.76 MB. Select 1K, not the default high-resolution package. | 10K tris | **Provisional 5–22 MiB** with selected 1K maps, mipmaps and mesh. | Good military prop candidate. Inspect stencils and markings for unsupported unit/national claims before using; remove or obscure markings only if the license and modification policy permit. ([source metadata](https://polyhaven.com/a/old_military_crate)) |
+| [Barrel_01](https://polyhaven.com/a/Barrel_01) | Jorge Camacho; CC0; commercial use permitted and attribution optional. ([Poly Haven license](https://polyhaven.com/license)) | glTF, USD, FBX and ZIP are listed; selectable 1K–8K maps. Select a 1K set and a neutral oxide-gray/green material. | 3K tris | **Provisional 4–18 MiB** at 1K with one selected material variant. | Suitable as a small static street prop. Do not use the explosive/radiation variants or their markings in the pilot; they make unsupported gameplay/story claims. ([source metadata](https://polyhaven.com/a/Barrel_01)) |
+| [Sandbag Wall Segment](https://www.innerscene.com/tools/library/3d-parts/sandbag-wall-segment-1017f5ee) | Original model by Innerscene; CC0; commercial use, modification and redistribution permitted without attribution. | GLB; 1.8 MB source. Page reports nominal size 1.895×0.592×1.000 m. Texture resolution and triangle count are not published. | Not reported | **Provisional 2–8 MiB** based on the 1.8 MB GLB plus import overhead; verify texture/mesh content. | Useful later in Area B, but not needed for the first facade pilot. Do not infer its mesh count or texture size from the small file size. |
+| [Rubble](https://polyhaven.com/a/rubble) PBR surface | Amal Kumar; CC0; commercial use and redistribution permitted. ([Poly Haven license](https://polyhaven.com/license)) | Texture archive offers 1K–16K and JPG/PNG/EXR maps; use a 1K JPG/PNG set only if it proves better than current masonry/earth maps. No geometry format needed. | N/A | **Provisional 4–16 MiB** for a 1K base color/normal/roughness-or-packed set with mipmaps; actual maps/import settings determine this. | Optional material, not a mesh. Avoid adding it in the pilot if the selected ruin and rubble model already share adequate surface materials. ([source metadata](https://polyhaven.com/a/rubble)) |
+
+### Assets deliberately not selected yet
+
+- **Vehicles:** no specific downloadable, clearly WWII-appropriate, optimized vehicle with sufficiently verified asset metadata is recommended for the pilot. Keep the current procedural lorry. Later vehicle research must verify model provenance, license, markings, texture budget, scale and collision separation. Poly Haven's [Covered Car](https://polyhaven.com/a/covered_car) is CC0, glTF, 13K tris and has 1K–8K textures, but it is a covered civilian car, not a destroyed military transport; it is not a substitute for the requested lorry.
+- **Dead trees and barbed wire:** defer to a later area-specific pass. The available [Dead Tree Trunk](https://polyhaven.com/a/dead_tree_trunk) is CC0, but its listed 102K tris and 51.5 MB default package are too costly for an unmodified UHD 620 pilot prop. No wire model is selected until the exact model/license and thin-geometry overdraw are reviewed.
+- **Furniture, weapons, uniforms and insignia:** do not add in this pilot. Any identifiable period marking or weapon must have an accurate, documented reference and item-specific rights review.
+
+## 4. Pilot: one Ruined Street test bay
+
+Use one short street bay in an isolated pilot scene/branch after authorization. Keep the rest of Mission 01 exactly as it is. The intended visual target is the existing east-side facade shell centered at `(17, 4, -28)` (the shell’s current height is 8 m), with the roadside cover cluster centered at `(8, 0.58, -33)`. These positions were read from the current deterministic builder. Asset rotations and scales below are initial fit targets and must be corrected from the downloaded model’s documented axes and bounds.
+
+| Pilot item | Placement and orientation | Collision, navigation and LOS | LOD and cost |
+|---|---|---|---|
+| Ruined House Low Poly facade | Root/pivot at `(17, 0, -28)`, yaw +90° so the east-side face points toward the central road (-X). Normalize render bounds to fit within the existing shell envelope (about 12×8×13 m); do not scale beyond it. Use as a render-mesh replacement/overlay in the pilot, not as a new gameplay body. | No new collision or navigation geometry. Keep the existing box collider at its exact current transform/size. Existing collision continues to block movement and shots through the old shell; avoid presenting an open window as a traversable/shoot-through opening. Inspect sightlines from both sides. | One facade at mid-distance: no dedicated LOD initially. One mesh plus shared materials; target 1K maps. Provisional 2–20 MiB. |
+| Rubble Pile (Game Ready / 2K PBR) | At the existing east collapsed-cover center `(8, 0.58, -33)`, yaw +15° for an authored, non-repeated silhouette. Scale its render bounds to remain inside the existing cover footprint (2.8×1.15×4.0 m). | Render-only replacement in the pilot. Keep the current box collision unchanged, so cover and navigation behavior stay fixed. The x=8 location is outside the navigation corridor x=±4.2; still verify actors do not snag on the unchanged collider. Existing cover already influences LOS; compare before/after from each spawn lane. | 1,536 tris; one copy. LOD unnecessary at this single near/mid-distance placement. Downscale to 1K if visual tests allow; 12–55 MiB at 2K, lower at 1K. |
+| Old Military Crate | Ground pivot `(9.6, 0, -23.5)`, yaw 0°. Fit within roughly 1.8×1×1 m and keep off the road. | Static visual only in pilot, no collider; no nav change. At x=9.6 it is outside the nav corridor. It should not intersect enemy ray paths at x≈0; verify all existing spawn-to-player view lines. | 10K tris, one 1K material set; no LOD. Provisional 5–22 MiB. |
+| Barrel_01 (neutral variant) | Ground pivot `(10.0, 0, -26.0)`, yaw +20°. Use only the neutral oxide-gray/green appearance, no explosive/radiation markings. | Static visual only; no collider and no nav change. It remains outside the corridor and should not affect firing lanes; validate at runtime. | 3K tris, one 1K material set; no LOD. Provisional 4–18 MiB. |
+
+The proposed crate and barrel form two small environmental props alongside the facade and rubble. Leave adequate visual separation so neither merges into the facade or reads as a deliberate combat barrier. If the facade’s visual openings conflict with the unchanged collision, choose a solid facade section instead of changing the collision.
+
+### Pilot validation before spreading assets
+
+1. Owner first completes Phase 5A visual review and manual F5/F6 gameplay approval, then separately authorizes a Phase 5B pilot.
+2. Record current capture and performance baselines from the same player-height views, including objective 3 and the -50/-54 enemy positions. The existing Phase 5A images are not a substitute for this street-specific before/after baseline.
+3. Verify the downloaded files, source pages, licenses, author names, attribution chain, modification notes, and exact asset archive contents before import. Reject any model with unclear embedded textures or incompatible rights.
+4. Import into a scratch pilot scene using GLB/glTF, shared opaque materials and 1K textures. Keep the original scene and gameplay objects intact; test the visual replacement without altering collider transforms or resource coordinates.
+5. Capture identical views at 1280×720 on GL Compatibility and inspect daylight, brick readability, silhouette, texture tiling, scale, clipping, objective marker visibility, enemy visibility, weapon ray visibility, collision silhouette and prop clutter.
+6. Re-run Phase 3B, 4A, 4B and 4C harnesses. Manually walk and fight through the pilot in F5 and run F6; verify movement, player shots and enemy shots behave against unchanged gameplay geometry.
+7. Measure draw calls, frame-time and memory on the actual Intel UHD 620 before/after using the same route and method. Accept the pilot only if the visual gain is apparent and measured cost is documented. Otherwise revise the selected asset/texture budget or stop before area rollout.
+
+## 5. Integration rules for later area rollout
+
+All placements below are proposals; exact transformed bounds must be checked against the current scene and mission resources before implementation.
+
+| Area/category | Proposed treatment and placement | Gameplay impact to preserve | LOD/performance note |
+|---|---|---|---|
+| A — landing buildings/shore | Keep the shoreline, pier, water and ground. Add only small visual facade/debris dressing near existing perimeter structures; do not add assets at player start `(0, 0.08, 22)`, objective 1 `(0,0,14)`, the existing pier walk or shore edge. | Render-only; no new body near the walkable route, water boundary, trigger, or player start. Do not modify terrain, objective transform or river collision. | Few silhouettes; no LOD needed for props seen only nearby. Share 1K maps. |
+| B — transition, sandbags, timber and wire | Use a short sandbag segment at an existing shoulder/cover location outside `|x|≤4.2`; add limited wood debris. Barbed wire is deferred until low-cost geometry and visual clearance are established. | Do not extend cover into the central lane or change nav polygon, encounter positions `(-3,0,-17)` / `(3,0,-20)`, or objective 2 at z=-8. Any wire is render-only and must remain visibly clear of the player route. | Thin wire can shimmer and add many edges; avoid alpha cards, use one simple mesh run, test at distance. No LOD until repeated runs justify it. |
+| C — ruined street facades | Pilot one facade at the existing shell center `(17,4,-28)`. If accepted, replace selected render meshes on existing shell slots, not the complete street. Prioritize varied window recesses, damaged roofline and non-colliding plaster/brick detail. | Preserve current StaticBody3D/CollisionShape3D dimensions, nav corridor, objective z=-42/-75/-90, spawn coordinates and road width. No new collision unless separately authorized. Retain established LOS and cover behavior. | Use modular reusable pieces/materials. LOD/visibility range only for distant repeated facade modules and only after profile. |
+| C — rubble, furniture, debris | Add or replace render-only clusters at the current cover footprints, starting with `(8,0.58,-33)`; furniture only as non-colliding background silhouettes well outside the corridor. | Keep existing cover collision. Do not change LOS blockers without explicit testing. No loose physical rigid bodies. | One shared rubble material; avoid unique maps per pile. Consider MultiMesh only if repeated static instances profile as a cost. |
+| C — military props | Reuse limited crate/barrel candidates at facade shoulder positions, starting with the pilot coordinates. Add equipment only as small background dressing; no loose pickup or inventory behavior. | No gameplay body or navigation change. Keep the objective markers, player rays and enemy lanes readable. | Reuse one crate scene/material and one barrel scene/material; avoid many unique draw submissions. |
+| C — vehicle | Keep the current lorry until a specific licensed, right-scale, optimized WWII-appropriate model is found. Evaluate visual-only swap at its current center `(-6.7, 0.9, -46)` in a separate pilot after facade acceptance. | Keep original lorry collision and exact spawn/nav/objective geometry. Vehicle silhouette must not hide the -50/-54 spawn lanes or block the road. Do not use a civilian car as a claimed military truck. | One static mesh; use LOD only if required by actual poly count and distance. No animation or physics in this pass. |
+| A–C — materials | Prefer existing shared textures/materials where plausible. If an additional wall texture is justified, shortlist one 1K damaged-brick material such as [ambientCG Bricks 097](https://ambientcg.com/view?id=Bricks097), whose source page lists 1K JPG archive, and verify the CC0 license. | Texture-only; no geometry/collision/nav effect. Match existing muted palette and preserve marker/enemy contrast. | One shared 1K material set, not a unique 2K/4K set for each object. ambientCG lists CC0 commercial use in its [license](https://docs.ambientcg.com/license/). |
+
+## 6. Technical and performance strategy
+
+- Set 1K as the normal map resolution for props and mid-sized facade pieces; allow 2K only on a close hero surface when screenshots show a material benefit. Do not import 4K/8K as the production default.
+- Keep imported models static, opaque and render-only where practical. Build collision from the existing primitive gameplay bodies. Never auto-generate colliders across a high-detail ruin/rubble mesh.
+- Prefer a small number of shared materials; consolidate texture maps into ORM only when the source semantics and Godot importer remain correct. Keep albedo, normal and roughness consistent with existing muted material palette.
+- Inventory source archives, imported dimensions, triangles, material count, map dimensions, disk size and estimated resident memory per asset. Keep CC BY credit records in a project asset manifest if an asset requires attribution.
+- Reuse the same imported mesh/material resource for repeated instances. Avoid unique duplicates and per-object material overrides that break batching. Do not merge the entire street into one mesh because it harms culling and iteration.
+- First limit small visible prop count and use distance/visibility ranges for nonessential repeated dressing. Consider LOD only for assets visible at multiple distances. Measure before using MultiMesh, occlusion or scene-wide batching.
+- No volumetric fog, real-time shadows, alpha-heavy dust, physics props, or project renderer changes in this asset pilot. Any such proposal belongs in a separately measured later stage.
+- Do not claim a performance budget is met until tested on the target UHD 620 system. Estimates above are for selection only and include uncertainty.
+
+## 7. Risks and controls
+
+| Risk | Control |
+|---|---|
+| Listing says free but a particular model is noncommercial, editorial, or has unclear embedded sources | Confirm the item-level license and every embedded/derived component before download; use only CC0 or reviewed CC BY assets for a commercial-capable plan. Do not use editorial-only or NC assets. |
+| CC BY credit is omitted or derivative changes are not noted | Record title, creator, source URL, license URL, attribution parties and modifications in the asset inventory and final credits. |
+| High-resolution maps crowd shared UHD memory or cause long import/startup | Choose 1K; inspect actual files, compress/import appropriately, share maps and measure import plus in-scene memory. |
+| Decorative geometry adds draw calls/overdraw or blocks sightlines | Keep pilot object count low, use opaque meshes, preserve cover colliders and inspect from all existing spawn positions. |
+| Facade visual openings conflict with unchanged solid collider | Use solid portions or leave the underlying geometry visible; do not imply a functional opening unless a separate gameplay/collision change is approved. |
+| Imported scale, pivot, forward axis or normals are wrong | Inspect bounds, transforms, normals, UVs and texture channels in the isolated pilot; document any scale/rotation correction. |
+| Markings imply a real unit, date, vehicle or battle event without evidence | Use unmarked/neutral variants. Keep fictional mission orders distinct; support identifiable historical details with reliable references. |
+| Several user-uploaded assets share the same CC label but different rights/attribution | Audit every item individually. Sketchfab listing and creator details take precedence over search snippets; preserve authors and source-model credits. |
+
+## 8. Proposed implementation stages (future authorization required)
+
+| Stage | Scope | Exit gate |
+|---|---|---|
+| 0 — Owner gate | Complete Phase 5A visual review and manual F5/F6 gameplay verification. | Owner explicitly accepts Phase 5A and separately authorizes Phase 5B pilot work. |
+| 1 — Asset clearance | Select final facade/rubble/prop candidates; verify files, licenses, credit chains, dimensions and contents. Download only after authorization. | Asset manifest complete; no unresolved commercial-use or attribution questions. |
+| 2 — Street pilot | Integrate the four proposed visual items only at the defined street bay in an isolated pilot. Keep collisions/nav/resources unchanged. | Owner accepts appearance and usability; regression and target-device performance evidence recorded. |
+| 3 — Area C rollout | Apply accepted facade and debris kit selectively to existing street slots; evaluate a separate lorry candidate last. | Route, combat lanes, objectives, and nav remain intact; captures and performance compare against baseline. |
+| 4 — Area B / Area A dressing | Add approved shoulder props to transition and landing without replacing terrain, shore, pier or route. | No blocked path, objective marker, player start, or enemy visibility regression. |
+| 5 — Final optimization and verification | Consolidate shared materials, remove unused maps, tune visibility/LOD based on profile, repeat all harnesses and manual checks. | Phase 5B report with asset credits, exact imports, captures, regressions and measured target-hardware performance. |
+
+No stage authorizes changes to player/weapon/enemy logic, objective triggers, enemy spawn coordinates, collision/navigation, mission flow, project settings or the full battlefield layout. Any need for those changes requires a separate owner decision.
+
+## 9. Planning source record
+
+Asset facts above were checked against the named item pages and source license pages on 2026-11-09. The important source pages are linked in the tables. Search results alone were not treated as proof of an asset license. Re-check listings at the time of any later download; creator, format options, map choices and license terms can change.

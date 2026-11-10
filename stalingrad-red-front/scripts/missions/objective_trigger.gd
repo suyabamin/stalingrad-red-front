@@ -7,6 +7,7 @@ class_name ObjectiveTrigger
 
 var _player_inside: bool = false
 var _consumed: bool = false
+var _mission_run_id: int = 0
 
 func _ready() -> void:
 	collision_layer = 0
@@ -15,6 +16,9 @@ func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
 	MissionManager.objective_started.connect(_on_objective_started)
+	MissionManager.mission_prepared.connect(_on_mission_prepared)
+	if MissionManager.current_definition != null:
+		_mission_run_id = MissionManager.mission_run_id
 	_build_marker()
 
 func _on_body_entered(body: Node3D) -> void:
@@ -30,13 +34,17 @@ func _on_body_exited(body: Node3D) -> void:
 func _on_objective_started(_objective: ObjectiveDefinition, _number: int, _total: int) -> void:
 	_try_complete()
 
+func _on_mission_prepared(_definition: MissionDefinition) -> void:
+	_mission_run_id = MissionManager.mission_run_id
+	_consumed = false
+
 func _try_complete() -> void:
 	if not _player_inside or _consumed or MissionManager.mission_state != MissionManager.MissionState.ACTIVE:
 		return
 	var objective := MissionManager.get_current_objective()
 	if objective == null or objective.objective_id != objective_id:
 		return
-	_consumed = MissionManager.complete_objective(objective_id)
+	_consumed = MissionManager.report_objective_location(objective_id, _mission_run_id)
 
 func _build_marker() -> void:
 	var material := StandardMaterial3D.new()

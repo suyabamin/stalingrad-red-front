@@ -8,12 +8,15 @@ Verification date: 2026-11-09
 - Headless Phase 4B integration harness: `PHASE_04B_RUNTIME_CHECKS_PASSED=33 FAILED=0`.
 - Existing Phase 4A traversal harness: `PHASE_04A_RUNTIME_CHECKS_PASSED=11`.
 - Existing Phase 3B combat harness: `PHASE_03B_RUNTIME_CHECKS_PASSED=26`.
+- Post-Phase-4C regression run: updated Phase 4B `PHASE_04B_RUNTIME_CHECKS_PASSED=36 FAILED=0`; updated Phase 4A `PHASE_04A_RUNTIME_CHECKS_PASSED=12`; Phase 3B remains `PHASE_03B_RUNTIME_CHECKS_PASSED=26`.
 - Non-headless GL Compatibility render and viewport-input check on `Intel(R) UHD Graphics 620`. Rendered 1280×720 briefing, gameplay/objective HUD and completion screens were inspected. A viewport click at the Start Mission button began play; runtime output showed `paused=false`, `mouse_mode=2` (captured), and active mission state. The rendered completion screen showed 5/5 objectives.
 - Godot logged a Windows root-certificate-store warning and could not write its default `user://logs` path. The editor scan also reported that it could not save editor settings outside the workspace. These warnings did not prevent scene loading or checks. Sustained frame rate/memory were not measured.
 
 ## User-performed manual results
 
 The project owner reports completing these checks in the running game. The test date and exact hardware/runtime details were not provided. These results are separate from the automated harness results above.
+
+These manual results were recorded before Phase 4C combat integration. They remain valid historical Phase 4B results but do not verify the newly added mission encounters.
 
 | Manual check | User-reported result |
 |---|---|
@@ -45,6 +48,7 @@ The project owner reports completing these checks in the running game. The test 
 | Existing weapons and HUD | PASSED | Harness switched to PPSH and Mosin, fired each, checked ammunition/HUD updates, used WeaponManager reload, and exercised ADS camera transition. Non-headless run reached ADS FOV 58.0 with aim input. |
 | F6 enemy range and Phase 3B AI | PASSED | Existing Phase 3B 26-assertion regression harness passed, including detection/chase, attacks/damage, wall occlusion, reload and enemy death. Enemy range remains isolated. |
 | User-driven editor playthrough | PASSED (USER-REPORTED) | The project owner reports passing the manual briefing, start/mouse capture, five-objective progression, HUD, 5/5 completion, restart, death/restart, and F6 Enemy Test Range checks. No problems or new Godot red errors were reported. |
+| Post-Phase-4C automated regression | PASSED | Updated 36-check encounter-aware Phase 4B harness passed, including enemy cleanup on player death and one fresh first encounter after restart. Phase 4C manual gameplay verification is now reported passed by the project owner; see `PHASE_04C_TEST_REPORT.md`. |
 | Windows export, sustained target performance | NOT TESTED | No export or frame-time/memory profile was performed. |
 
 ## Reproduction
@@ -58,4 +62,4 @@ From the project directory:
 & 'C:\Users\HP\Downloads\Godot_v4.7.2-stable_win64.exe\Godot_v4.7.2-stable_win64.exe' --headless --path . res://scenes/testing/phase_03b_runtime_check.tscn
 ```
 
-For manual verification, launch the project with F5, review the briefing and click **START MISSION**. Walk through each marked arch in order until the completion screen appears, then try **RESTART MISSION**. The project owner reports these checks passed, including player death/restart and F6 Enemy Test Range; see **User-performed manual results** above. The deterministic death/failure/restart path is also covered by the Phase 4B runtime harness because Mission 01 intentionally has no damage source in this phase. F6 on `scenes/testing/enemy_test_range.tscn` remains the isolated enemy range.
+For the original Phase 4B owner-performed verification, launch with F5, review the briefing, start the mission, and traverse each marked arch. The owner reports those pre-combat checks passed; see **User-performed manual results** above. After Phase 4C, the updated automated regression covers enemy death cleanup and fresh encounter state on restart. The project owner now reports Phase 4C manual gameplay verification passed; see `PHASE_04C_TEST_REPORT.md` for the separate attribution.

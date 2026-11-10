@@ -1,0 +1,80 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/environment/phase_5c_atmosphere.gd" id="1_script"]
+[ext_resource type="Material" path="res://resources/environment/atmosphere/dust_particle_material.tres" id="2_dust_mat"]
+[ext_resource type="Material" path="res://resources/environment/atmosphere/smoke_particle_material.tres" id="3_smoke_mat"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_dust"]
+material = ExtResource("2_dust_mat")
+size = Vector2(1.2, 1.2)
+
+[sub_resource type="QuadMesh" id="QuadMesh_smoke"]
+material = ExtResource("3_smoke_mat")
+size = Vector2(3.5, 3.5)
+
+[node name="Phase5CAtmosphere" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="LandingDust" type="CPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 1.2, 10)
+amount = 24
+lifetime = 6.0
+mesh = SubResource("QuadMesh_dust")
+emission_shape = 3
+emission_box_extents = Vector3(8, 1.2, 12)
+direction = Vector3(0.8, 0.1, -0.6)
+spread = 25.0
+gravity = Vector3(0, -0.03, 0)
+initial_velocity_min = 0.4
+initial_velocity_max = 0.8
+scale_amount_min = 0.8
+scale_amount_max = 1.6
+color = Color(0.72, 0.68, 0.62, 0.12)
+
+[node name="TransitionDust" type="CPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1.2, -25)
+amount = 24
+lifetime = 6.0
+mesh = SubResource("QuadMesh_dust")
+emission_shape = 3
+emission_box_extents = Vector3(8, 1.2, 14)
+direction = Vector3(-0.7, 0.1, -0.7)
+spread = 25.0
+gravity = Vector3(0, -0.03, 0)
+initial_velocity_min = 0.4
+initial_velocity_max = 0.8
+scale_amount_min = 0.8
+scale_amount_max = 1.6
+color = Color(0.7, 0.66, 0.6, 0.11)
+
+[node name="DistantSmokePlumeWest" type="CPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 4, -45)
+amount = 36
+lifetime = 8.0
+mesh = SubResource("QuadMesh_smoke")
+emission_shape = 1
+emission_sphere_radius = 1.5
+direction = Vector3(0.2, 1, -0.2)
+spread = 18.0
+gravity = Vector3(0, 0.15, 0)
+initial_velocity_min = 1.2
+initial_velocity_max = 2.2
+scale_amount_min = 1.8
+scale_amount_max = 4.5
+color = Color(0.22, 0.22, 0.24, 0.18)
+
+[node name="DistantSmokePlumeEast" type="CPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 5, -80)
+amount = 36
+lifetime = 8.0
+mesh = SubResource("QuadMesh_smoke")
+emission_shape = 1
+emission_sphere_radius = 1.5
+direction = Vector3(-0.2, 1, -0.3)
+spread = 18.0
+gravity = Vector3(0, 0.15, 0)
+initial_velocity_min = 1.2
+initial_velocity_max = 2.2
+scale_amount_min = 2.0
+scale_amount_max = 5.0
+color = Color(0.24, 0.23, 0.25, 0.16)

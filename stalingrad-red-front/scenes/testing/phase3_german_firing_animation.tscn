@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c5k8y7w6j12qm"]
+
+[ext_resource type="Script" path="res://scripts/testing/phase3_german_firing_animation.gd" id="1_fire"]
+
+[node name="Phase3GermanFiringAnimation" type="Node3D"]
+script = ExtResource("1_fire")

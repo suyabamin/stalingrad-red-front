@@ -1,6 +1,10 @@
-[gd_resource type="Resource" script_class="WeaponData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="WeaponData" load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1"]
+[ext_resource type="AudioStream" path="res://assets/library/audio/weapons/soviet/ppsh_fire.tres" id="2_fire"]
+[ext_resource type="AudioStream" path="res://assets/library/audio/weapons/soviet/ppsh_reload.tres" id="3_reload"]
+[ext_resource type="AudioStream" path="res://assets/library/audio/weapons/dry_fire_click.tres" id="4_empty"]
+[ext_resource type="AudioStream" path="res://assets/library/audio/impacts/bullet_impact_masonry.tres" id="5_impact"]
 
 [resource]
 script = ExtResource("1")
@@ -15,3 +19,7 @@ automatic = true
 recoil_strength = 0.018
 ads_fov = 65.0
 maximum_range = 160.0
+fire_sound = ExtResource("2_fire")
+reload_sound = ExtResource("3_reload")
+empty_sound = ExtResource("4_empty")
+impact_sound = ExtResource("5_impact")

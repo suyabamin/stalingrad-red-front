@@ -1,0 +1,11 @@
+Model Information:
+* title:	Destroyed buildings after Russian attack
+* source:	https://sketchfab.com/3d-models/destroyed-buildings-after-russian-attack-993ee16a22e946b8929872fffac23f4a
+* author:	Simeon Schmauß (https://sketchfab.com/semeion)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Destroyed buildings after Russian attack" (https://sketchfab.com/3d-models/destroyed-buildings-after-russian-attack-993ee16a22e946b8929872fffac23f4a) by Simeon Schmauß (https://sketchfab.com/semeion) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

@@ -23,6 +23,9 @@ position = Vector3(0, 1.62, 0)
 current = true
 fov = 80.0
 
+[node name="AudioListener3D" type="AudioListener3D" parent="Head/Camera3D"]
+current = true
+
 [node name="Health" type="Node" parent="."]
 script = ExtResource("2")
 

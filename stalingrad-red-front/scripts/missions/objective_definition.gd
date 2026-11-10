@@ -6,3 +6,4 @@ class_name ObjectiveDefinition
 @export var display_name: String = ""
 @export_multiline var description: String = ""
 @export var trigger_position: Vector3 = Vector3.ZERO
+@export var encounter: EncounterDefinition

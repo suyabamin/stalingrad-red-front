@@ -20,6 +20,9 @@ var current_objective_index: int = -1
 var completed_objective_count: int = 0
 var objective_states: Array[ObjectiveState] = []
 var _completion_emitted: bool = false
+var mission_run_id: int = 0
+var current_objective_location_reached: bool = false
+var current_objective_encounter_cleared: bool = false
 
 func _ready() -> void:
 	if not GameManager.player_died.is_connected(_on_player_died):
@@ -37,6 +40,7 @@ func prepare_mission(definition: MissionDefinition) -> bool:
 		seen_ids[objective.objective_id] = true
 	current_definition = definition
 	current_mission_id = String(definition.mission_id)
+	mission_run_id += 1
 	mission_state = MissionState.READY
 	current_objective_index = 0
 	completed_objective_count = 0
@@ -44,6 +48,8 @@ func prepare_mission(definition: MissionDefinition) -> bool:
 	for _objective in definition.objectives:
 		objective_states.append(ObjectiveState.INACTIVE)
 	_completion_emitted = false
+	current_objective_location_reached = false
+	current_objective_encounter_cleared = false
 	mission_state_changed.emit(&"ready")
 	mission_prepared.emit(definition)
 	return true
@@ -80,6 +86,43 @@ func complete_objective(objective_id: StringName) -> bool:
 		return false
 	if objective_states[current_objective_index] != ObjectiveState.ACTIVE:
 		return false
+	if not current_objective_location_reached:
+		return false
+	if objective.encounter != null and not current_objective_encounter_cleared:
+		return false
+	_complete_active_objective(objective)
+	return true
+
+func report_objective_location(objective_id: StringName, report_run_id: int) -> bool:
+	if not _is_current_objective_report(objective_id, report_run_id) or current_objective_location_reached:
+		return false
+	current_objective_location_reached = true
+	_try_complete_active_objective()
+	return true
+
+func report_objective_encounter_cleared(objective_id: StringName, report_run_id: int) -> bool:
+	if not _is_current_objective_report(objective_id, report_run_id) or current_objective_encounter_cleared:
+		return false
+	var objective := get_current_objective()
+	if objective == null or objective.encounter == null:
+		return false
+	current_objective_encounter_cleared = true
+	_try_complete_active_objective()
+	return true
+
+func _is_current_objective_report(objective_id: StringName, report_run_id: int) -> bool:
+	var objective := get_current_objective()
+	return mission_state == MissionState.ACTIVE and report_run_id == mission_run_id and objective != null and objective.objective_id == objective_id
+
+func _try_complete_active_objective() -> void:
+	var objective := get_current_objective()
+	if objective == null or not current_objective_location_reached:
+		return
+	if objective.encounter != null and not current_objective_encounter_cleared:
+		return
+	complete_objective(objective.objective_id)
+
+func _complete_active_objective(objective: ObjectiveDefinition) -> void:
 	objective_states[current_objective_index] = ObjectiveState.COMPLETED
 	completed_objective_count += 1
 	objective_completed.emit(objective, completed_objective_count, get_objective_count())
@@ -89,10 +132,9 @@ func complete_objective(objective_id: StringName) -> bool:
 		if not _completion_emitted:
 			_completion_emitted = true
 			mission_completed.emit(current_mission_id)
-		return true
+		return
 	current_objective_index += 1
 	_activate_current_objective()
-	return true
 
 func complete_current_mission() -> void:
 	var objective := get_current_objective()
@@ -115,6 +157,8 @@ func fail_current_objective(reason: String) -> bool:
 func _activate_current_objective() -> void:
 	if current_definition == null or current_objective_index < 0 or current_objective_index >= current_definition.objectives.size():
 		return
+	current_objective_location_reached = false
+	current_objective_encounter_cleared = false
 	objective_states[current_objective_index] = ObjectiveState.ACTIVE
 	objective_started.emit(current_definition.objectives[current_objective_index], current_objective_index + 1, get_objective_count())
 

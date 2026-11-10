@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/textures/environment/masonry_surface.png" id="surface"]
+
+[resource]
+resource_name = "Brick - weathered red brown"
+albedo_color = Color(0.66, 0.38, 0.29, 1)
+roughness = 0.96
+metallic = 0
+albedo_texture = ExtResource("surface")
+uv1_scale = Vector3(10, 10, 1)

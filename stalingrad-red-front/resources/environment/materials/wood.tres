@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/textures/environment/timber_surface.png" id="surface"]
+
+[resource]
+resource_name = "Timber - dark brown"
+albedo_color = Color(0.34, 0.26, 0.18, 1)
+roughness = 0.92
+metallic = 0
+albedo_texture = ExtResource("surface")
+uv1_scale = Vector3(3, 3, 1)
